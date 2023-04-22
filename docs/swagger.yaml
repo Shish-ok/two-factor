@@ -1,0 +1,104 @@
+definitions:
+  confirmations.Confirmation:
+    properties:
+      code:
+        type: string
+      requestId:
+        type: string
+    type: object
+  internal_api.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  internal_api.SendCodeRequest:
+    properties:
+      number:
+        type: string
+    type: object
+  internal_api.VerifyCodeResponse:
+    properties:
+      verifiedAt:
+        type: integer
+    type: object
+  two-factor-auth_internal_api.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  two-factor-auth_internal_api.SendCodeRequest:
+    properties:
+      number:
+        type: string
+    type: object
+  two-factor-auth_internal_api.VerifyCodeResponse:
+    properties:
+      verifiedAt:
+        type: integer
+    type: object
+info:
+  contact: {}
+  title: two-factor-auth doc
+paths:
+  /send:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Отправляет код двухфакторной авторизации, возвращая id запроса и сам код
+        Код ошибки 400: неверный json или невалидный номер
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/two-factor-auth_internal_api.SendCodeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/confirmations.Confirmation'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/two-factor-auth_internal_api.Error'
+      summary: Отправляет код для двухфакторной авторизации
+      tags:
+      - auth
+  /verify:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Верифицирует код двухфакторной авторизации, возвращая текущую дату в UnixTime
+        Код ошибки 400: неверный json или невалидный код авторизации
+        Код ошибки 403: исчерпан лимит попыток или код уже не действителен
+      parameters:
+      - description: Входные параметры
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/confirmations.Confirmation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_api.VerifyCodeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/internal_api.Error'
+        "403":
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/internal_api.Error'
+      summary: Верифицирует код двухфакторной авторизации
+      tags:
+      - auth
+swagger: "2.0"

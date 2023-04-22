@@ -1,0 +1,9 @@
+api:
+  port: 8080
+  host: 0.0.0.0
+  use_cors: false
+redis_configuration:
+  redis_addr: redis:6379
+auth_configuration:
+  ttl: 5m
+  code_len: 4
