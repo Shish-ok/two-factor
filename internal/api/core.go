@@ -6,16 +6,19 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"two-factor-auth/docs"
 	"two-factor-auth/internal/config"
+	"two-factor-auth/internal/services/auth"
 )
 
 func NewAPI(
 	router *gin.Engine,
 	cfg config.ServiceConfiguration,
+	auth *auth.Service,
 ) *API {
 	api := &API{
 		router:  router,
 		host:    cfg.APIConfig.GetAddr(),
 		useCORS: cfg.APIConfig.UseCORS,
+		auth:    auth,
 	}
 
 	api.base = api.router.Group(BasePath)
@@ -23,12 +26,11 @@ func NewAPI(
 }
 
 type API struct {
-	router *gin.Engine
-
+	router  *gin.Engine
 	useCORS bool
 	host    string
-
-	base *gin.RouterGroup
+	base    *gin.RouterGroup
+	auth    *auth.Service
 }
 
 // @BasePath /api/v1/
@@ -41,6 +43,8 @@ func (api *API) Run() {
 	if api.useCORS {
 		api.router.Use(CORS())
 	}
+	
+	api.registerRoutes()
 
 	api.router.Run(api.host)
 }

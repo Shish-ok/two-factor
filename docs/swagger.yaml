@@ -46,7 +46,7 @@ paths:
       - application/json
       description: |-
         Отправляет код двухфакторной авторизации, возвращая id запроса и сам код
-        Код ошибки 400: неверный json или невалидный номер
+        Код ошибки 400: неверный json
       parameters:
       - description: Входные параметры
         in: body
@@ -65,6 +65,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/two-factor-auth_internal_api.Error'
+        "500":
+          description: Internal Server Error
       summary: Отправляет код для двухфакторной авторизации
       tags:
       - auth
@@ -74,8 +76,8 @@ paths:
       - application/json
       description: |-
         Верифицирует код двухфакторной авторизации, возвращая текущую дату в UnixTime
-        Код ошибки 400: неверный json или невалидный код авторизации
-        Код ошибки 403: исчерпан лимит попыток или код уже не действителен
+        Код ошибки 400: неверный json
+        Код ошибки 403: исчерпан лимит попыток или неверный код
       parameters:
       - description: Входные параметры
         in: body
@@ -98,6 +100,8 @@ paths:
           description: Forbidden
           schema:
             $ref: '#/definitions/internal_api.Error'
+        "500":
+          description: Internal Server Error
       summary: Верифицирует код двухфакторной авторизации
       tags:
       - auth

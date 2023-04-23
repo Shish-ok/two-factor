@@ -18,7 +18,7 @@ const docTemplate = `{
     "paths": {
         "/send": {
             "post": {
-                "description": "Отправляет код двухфакторной авторизации, возвращая id запроса и сам код\nКод ошибки 400: неверный json или невалидный номер",
+                "description": "Отправляет код двухфакторной авторизации, возвращая id запроса и сам код\nКод ошибки 400: неверный json",
                 "consumes": [
                     "application/json"
                 ],
@@ -52,13 +52,16 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/two-factor-auth_internal_api.Error"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
         },
         "/verify": {
             "post": {
-                "description": "Верифицирует код двухфакторной авторизации, возвращая текущую дату в UnixTime\nКод ошибки 400: неверный json или невалидный код авторизации\nКод ошибки 403: исчерпан лимит попыток или код уже не действителен",
+                "description": "Верифицирует код двухфакторной авторизации, возвращая текущую дату в UnixTime\nКод ошибки 400: неверный json\nКод ошибки 403: исчерпан лимит попыток или неверный код",
                 "consumes": [
                     "application/json"
                 ],
@@ -98,6 +101,9 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/internal_api.Error"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }

@@ -9,6 +9,11 @@ import (
 )
 
 type Number string
+
+func (num *Number) ToStr() string {
+	return string(*num)
+}
+
 type UID string
 type Code string
 
@@ -21,8 +26,16 @@ func NewAuthCode(codeLen uint) Code {
 	return Code(strconv.FormatInt(rand.Int63n(max-min+1)+min, 10))
 }
 
+func (code *Code) ToStr() string {
+	return string(*code)
+}
+
 func NewRequestUID() UID {
 	return UID(uuid.New().String())
+}
+
+func (uid *UID) ToStr() string {
+	return string(*uid)
 }
 
 type Confirmation struct {

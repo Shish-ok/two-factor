@@ -19,6 +19,6 @@ func CORS() gin.HandlerFunc {
 }
 
 func (api *API) registerRoutes() {
-	api.base.POST("/send")
-	api.base.POST("/verify")
+	api.base.POST("/send", api.SendCode)
+	api.base.POST("/verify", api.VerifyCode)
 }
